@@ -49,7 +49,7 @@ Completed
 
 
 
-You can find some pictures at my blog :
+You can find some pictures at my blog (korean) :
 
 https://blog.naver.com/cloudree/221696084596
 

@@ -4,7 +4,7 @@
  *
  */
 
-#define PRODUCT       "Tester_670"
+#define PRODUCT       "=-=-=-= Tester_670 =-=-=-="
 #define MAJOR_VERSION "0"
 #define MINOR_VERSION "1"
 #define VERSION       ("v" MAJOR_VERSION "." MINOR_VERSION)

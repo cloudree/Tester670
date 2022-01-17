@@ -1,11 +1,23 @@
-//
-// Tester 670
-//
+/**
+ * This is a tester for the 74x670 chip. 
+ * 
+ * The ’HC670 and CD74HCT670 are 16-bit register files
+ * organized as 4 words x 4 bits each. Read and write address
+ * and enable inputs allow simultaneous writing into one location
+ * while reading another. Four data inputs are provided to store
+ * the 4-bit word. The write address inputs (WA0 and WA1)
+ * determine the location of the stored word in the register.
+ * When write enable (WE) is low the word is entered into the
+ * address location and it remains transparent to the data.
+ */
 
 #include <Arduino.h>
 #include "Common.h"
 #include "Debug.h"
 
+/** 
+ *  Writes a value pinCount bits long to the pins specified in the 3rd argument.
+ */
 void Write( byte value, int pinCount, int *pins )
 {
 #ifdef DEBUG_DETAIL  
@@ -31,6 +43,9 @@ void Write( byte value, int pinCount, int *pins )
 #endif
 }
 
+/**
+ * Reads value pinCount long from the pins specified in the 2nd argument.
+ */
 byte Read( int pinCount, int *pins )
 {
 #ifdef DEBUG_DETAIL  
@@ -54,20 +69,29 @@ byte Read( int pinCount, int *pins )
     return ret;
 }
 
+/**
+ * Write an data to a given address
+ */
 void Write670( byte addr, byte data )
 {
     Write( addr, 2, pin_WAddr );
     Write( data, 4, pin_WData );
 
+    // cycle the pin to initiate the write
     digitalWrite( pin_WE, LOW );
     delay(1);
     digitalWrite( pin_WE, HIGH );
 }
 
+/**
+ * Read data from a given address
+ */
 byte Read670( byte addr )
 {
     Write( addr, 2, pin_RAddr );
     
+    
+    // cycle the pin to initiate the read
     digitalWrite( pin_RE, LOW );
     byte ret = Read( 4, pin_RData );
     digitalWrite( pin_RE, HIGH );
@@ -100,6 +124,7 @@ void setup()
 void loop() 
 {
     DBGLN("PHASE 1");
+    // Store and check 2 different values in 4 addresses one address at a time. Total 8 checks for phase 1
     byte v[2] = { 0x5, 0xa };
     for( int i=0; i<2; i++ )
     {
@@ -120,6 +145,7 @@ void loop()
     }
 
     DBGLN("\nPHASE 2");
+    // Store and check 16 different values in 4 addresses one address at a time. Total 64 checks for phase 2
     for( int a=0; a<4; a++ )
     {
         for( int d=0; d<16; d++ )

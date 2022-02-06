@@ -9,6 +9,12 @@
  * determine the location of the stored word in the register.
  * When write enable (WE) is low the word is entered into the
  * address location and it remains transparent to the data.
+ * 
+ * Changes:
+ * 2022-02 - Use the onboard LED to show SUCCESS / FAILURE status
+ *           This allows you to use the tester in the field without a serial terminal.
+ *           Use white electrical tape to defuse the LED if they are too bright 
+ *           for example on the Arduino NANO.
  */
 
 #include <Arduino.h>
@@ -102,6 +108,9 @@ byte Read670( byte addr )
 void setup() 
 {
     DebugInit();
+    // initialize digital pin LED_BUILTIN as an output.
+    pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
 
     pinMode( pin_WE, OUTPUT );
     pinMode( pin_WAddr[0], OUTPUT );
@@ -167,5 +176,6 @@ void loop()
     }
 
     DBGLN("\nCompleted");
+    digitalWrite(LED_BUILTIN, HIGH);   // on completion of the test turn the LED on.
     DBGPAUSE();
 }
